@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>Hello {{ controller_name }}! ✅ </h1>
+
+        <h3>Caching with Symfony 4</h3>
+        <p>The cache was Created : {{ isCached }}</p>
+    </div>
+
+    <div style="text-align: right;margin-top: -100px!important;margin-right: 800px!important;">
+        <h4>Chronomètre</h4>
+        <span id="chronotime">0:00:00:00</span>
+        <form name="chronoForm">
+            <input type="button" name="startstop" value="start!" onClick="chronoStart()" />
+            <input type="button" name="reset" value="reset!" onClick="chronoReset()" />
+        </form>
+    </div>
+
+{#    <div style="text-align: center">#}
+{#        <h4>Chronomètre(2)</h4>#}
+{#        <form action="" method="post" name="formu" id="formu">#}
+{#            <p align="center">#}
+{#                <input name="heure" type="text" id="heure" value="0 jour(s) et 00 : 00 : 00"> ou <input name="seco"#}
+{#                                                                                                        type="text"#}
+{#                                                                                                        value="00">#}
+{#                seconde(s).#}
+{#            </p>#}
+{#            <p align="center">#}
+{#                <input type="button" name="Submit" value="Start!" onClick="Chrono();">#}
+{#                <input type="button" name="Submit2" value="Stop!" onClick="window.clearTimeout(chrono);">#}
+{#                <input type="button" name="Submit3" value="RAZ"#}
+{#                       onClick="if (confirm('Souhaitez vous mettre le compteur à zéro?')){s=0;m=0;j=0;h=0;ss=0; window.status = 'Chrono 0 jour(s) et 00 : 00 : 00' ; document.formu.heure.value ='0 jour(s) et 00 : 00 : 00';document.formu.seco.value='0'+0;}">#}
+{#            </p>#}
+{#            <p align="center"><br>#}
+{#                La Valeur du chrono apparaît dans la zone de texte et dans la barre de navigation#}
+{#                en bas de votre fenêtre. <br>#}
+{#                Cliquez sur le bouton Start pour faire partir le chrono, le bouton stop pour#}
+{#                l'arrêter et le bouton RAZ pour remettre à zéro</p>#}
+{#            <p align="center">.#}
+
+{#            </p>#}
+{#        </form>#}
+{#    </div>#}
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // https://www.exelib.net/javascript/creation-d-un-chronometre.html
+        ///////////////////////////////////////////////////////////////////
+        // https://www.proglogic.com/code/javascript/time/chronometer.php
+        var startTime = 0
+        var start = 0
+        var end = 0
+        var diff = 0
+        var timerID = 0
+        function chrono(){
+            end = new Date()
+            diff = end - start
+            diff = new Date(diff)
+            var msec = diff.getMilliseconds()
+            var sec = diff.getSeconds()
+            var min = diff.getMinutes()
+            var hr = diff.getHours()
+            if (min < 10){
+                min = "0" + min
+            }
+            if (sec < 10){
+                sec = "0" + sec
+            }
+            if(msec < 10){
+                msec = "00" +msec
+            }
+            else if(msec < 100){
+                msec = "0" +msec
+            }
+            document.getElementById("chronotime").innerHTML = hr + ":" + min + ":" + sec + ":" + msec
+            timerID = setTimeout("chrono()", 10)
+        }
+        function chronoStart(){
+            document.chronoForm.startstop.value = "stop!"
+            document.chronoForm.startstop.onclick = chronoStop
+            document.chronoForm.reset.onclick = chronoReset
+            start = new Date()
+            chrono()
+        }
+        function chronoContinue(){
+            document.chronoForm.startstop.value = "stop!"
+            document.chronoForm.startstop.onclick = chronoStop
+            document.chronoForm.reset.onclick = chronoReset
+            start = new Date()-diff
+            start = new Date(start)
+            chrono()
+        }
+        function chronoReset(){
+            document.getElementById("chronotime").innerHTML = "0:00:00:000"
+            start = new Date()
+        }
+        function chronoStopReset(){
+            document.getElementById("chronotime").innerHTML = "0:00:00:000"
+            document.chronoForm.startstop.onclick = chronoStart
+        }
+        function chronoStop(){
+            document.chronoForm.startstop.value = "start!"
+            document.chronoForm.startstop.onclick = chronoContinue
+            document.chronoForm.reset.onclick = chronoStopReset
+            clearTimeout(timerID)
+        }
+        ///////////////////////////////////////////////////////////////////
+        {# http://codices.b67.me/index.php/javascript/3-chronometre-en-javascript #}
+        // ss=0;
+        // s=00;
+        // m='0'+0;
+        // h='0'+0;
+        // j=0;
+        // window.status = "Chrono "+j+" jour(s) et " +h + ' : '  + m + ' : ' + s ;
+        // function Chrono() {
+        //     if (m==0) {m='00'}
+        //     if(h==0) {h='00'}
+        //     if (ss<10){ss='0'+ss;}
+        //     if (s<10){s='0'+s;}
+        //     window.status = "Chrono "+j+" jour(s) et " +h + ' : '  + m + ' : ' + s ;
+        //     document.formu.heure.value =j+" jour(s) et "+h + ' : ' + m + ' : ' + s ;
+        //     document.formu.seco.value =ss;
+        //     s++;
+        //     ss++;
+        //     if (h==24){h='0'+0;j++;}
+        //     if (s==60){s=0;s=0; m++;if(m<10){m='0'+m;}}
+        //     if (m==60){m='0'+0;h++;if(h<10){h='0'+h;}}
+        //     chrono=window.setTimeout("Chrono();",1000);
+        // }
+
+        ///////////////////////////////////////////////////////////////////
+    </script>
+{% endblock %}

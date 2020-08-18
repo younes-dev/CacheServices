@@ -1,0 +1,173 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+##########################################
+#              memcached Image           #
+##########################################
+    memcached:
+      image: memcached:alpine
+      container_name: CacheServices-memcached
+
+
+##########################################
+#                php Image               #
+##########################################
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: CacheServices-php-fpm
+      working_dir: /application
+      volumes:
+        - .:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+
+
+##########################################
+#              mariadb Image             #
+##########################################
+    mariadb:
+      image: mariadb:10.4
+      container_name: CacheServices-mariadb
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=CacheServices
+        - MYSQL_USER= root
+        - MYSQL_PASSWORD=
+      ports:
+        - "3307:3306"
+
+
+##########################################
+#               mysql Image              #
+##########################################
+    mysql:
+      image: mysql:8.0
+      container_name: CacheServices-mysql
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD= 'root'
+        - MYSQL_DATABASE= 'CacheServices'
+        - MYSQL_USER= 'root'
+        - MYSQL_PASSWORD= 'root'  #'root' #  in case mysql dont run remove 'root'
+      ports:
+        - "3308:3306"
+
+
+##########################################
+#             phpmyadmin Image           #
+##########################################
+#    phpmyadmin:
+#        image: phpmyadmin/phpmyadmin:latest
+#        container_name: phpmyadmin
+#        depends_on:
+#            - mariadb
+#        environment:
+#            - PMA_ARBITRARY=1
+#            - PMA_HOST=mysql
+#            - PMA_USER= root
+#            - PMA_PASSWORD= root
+#            - PMA_ROOT_PASSWORD= root
+#        ports:
+#            - "8088:80"
+#        links:
+#            - mysql
+
+
+##########################################
+#             phpmyadmin Image           #
+##########################################
+  #    phpmyadmin:
+  #      image: phpmyadmin/phpmyadmin
+  #      container_name: CacheServices-phpmyadmin
+  #      working_dir: /application
+  #      environment:
+  #        PMA_ARBITRARY: 1
+  #        MYSQL_USER: root
+  #        MYSQL_PASSWORD: root
+  #        MYSQL_ROOT_PASSWORD: root
+  #      ports:
+  #        - "80:80"
+  #      links:
+  #        - "mysql:mysql"
+
+##########################################
+#               nginx Image              #
+##########################################
+    webserver:
+      image: nginx:alpine
+      container_name: CacheServices-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+        - "8080:80"
+#        - ${APP_PORT}:80
+
+##########################################
+#               redis Image              #
+##########################################
+    redis:
+        image: redis:latest
+        container_name: CacheServices-redis
+        hostname: redis
+        working_dir: /application
+        volumes:
+          - .:/application
+          - "./volumes/redis:/data"
+        ports:
+          - "6379:6379" 
+         
+##########################################
+#               mailhog Image            #
+##########################################
+#    mailhog:
+#        image: christopherlafay/mailhog:latest
+#        environment:
+#            - MH_STORAGE=maildir
+#        volumes:
+#            - ./.data/mailhog:/maildir:rw,delegated
+#        ports:
+#          - "8025:8025"
+#          - "1025:1025"
+
+
+##########################################
+#               maildev Image            #
+##########################################
+#    php bin/console swiftmailer:email:send
+#    docker run -p 1085:80 -p 1025:25 djfarrelly/maildev
+    # maildev:
+    #     image: djfarrelly/maildev
+    #     ports:
+    #         - "1085:80"
+    #         - "1025:25"
+
+  ##########################################
+  #               jenkins Image            #
+  ##########################################
+## lien : https://dev.to/andresfmoya/install-jenkins-using-docker-compose-4cab
+## lien : https://stackoverflow.com/a/46179806
+## lien : https://github.com/bitnami/bitnami-docker-jenkins/blob/master/docker-compose.yml
+#    jenkins:
+#        image: jenkins
+#        container_name: CacheServices-jenkins
+#        #    user: root
+#        working_dir: /application
+#        ports:
+#          - 8088:8080
+#          - 50000:50000
+#        volumes:
+##          - .:/application
+#          - ~/jenkins:/var/CacheServices-jenkins
+#          - /var/run/docker.sock:/var/run/docker.sock
+#          - /usr/local/bin/docker:/usr/local/bin/docker
+#
+

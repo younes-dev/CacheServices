@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <style type="text/css">
+        #chronotime{
+            margin: auto ;
+            width: 300px;
+            text-align: center;
+        }
+        .tim{
+            margin: auto;
+            width: 300px;
+            border: 1px solid rgba(0,0,0,0.5);
+            padding:5px 0;
+            text-align: center;
+            font-size: 1.5em;
+            font-family: digital;
+            margin-bottom: 10px;
+        }
+        button{
+            background: #3498db;
+            color: #fff;
+            width: 70px;
+            border-radius: 5px;
+            line-height: 1.5em;
+            border: none
+        }
+    </style>
+
+    <div id="chronotime">
+        <div class="tim">
+            <span id="hours" >0 h</span> :
+            <span id="minutes">0 min</span> :
+            <span id="seconds">0 s</span> :
+            <span id="milliseconds" >0 ms</span>
+        </div>
+        <form name="chronoForm">
+
+            <input type="button" name="startstop" value="start!" onClick="chronoStart()" />
+            <input type="button" name="reset" value="reset!" onClick="chronoReset()" />
+
+
+            <p></p>
+
+            <button id="start" onclick="chronoStart()">Start</button>
+            <button id="stop" onclick="chronoStart()" >Stop</button>
+            <button id="reset" onclick="chronoReset()" >Reset</button>
+        </form>
+
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // https://www.exelib.net/javascript/creation-d-un-chronometre.html
+        ///////////////////////////////////////////////////////////////////
+        // https://www.proglogic.com/code/javascript/time/chronometer.php
+        var startTime = 0
+        var start = 0
+        var end = 0
+        var diff = 0
+        var timerID = 0
+        function chrono(){
+            end = new Date()
+            diff = end - start
+            diff = new Date(diff)
+            var msec = diff.getMilliseconds()
+            var sec = diff.getSeconds()
+            var min = diff.getMinutes()
+            var hr = diff.getHours()
+            if (min < 10){
+                min = "0" + min
+            }
+            if (sec < 10){
+                sec = "0" + sec
+            }
+            if(msec < 10){
+                msec = "00" +msec
+            }
+            else if(msec < 100){
+                msec = "0" +msec
+            }
+
+            document.getElementById("hours").innerHTML = hr.toString();
+            document.getElementById("minutes").innerHTML =  min.toString();
+            document.getElementById("chronotime").innerHTML =  sec.toString();
+            document.getElementById("chronotime").innerHTML = msec.toString();
+
+            // document.getElementById("chronotime").innerHTML = hr + ":" + min + ":" + sec + ":" + msec
+            timerID = setTimeout("chrono()", 10)
+        }
+        function chronoStart(){
+            document.chronoForm.startstop.value = "stop!"
+            document.chronoForm.startstop.onclick = chronoStop
+            document.chronoForm.reset.onclick = chronoReset
+            start = new Date()
+            chrono()
+        }
+        function chronoContinue(){
+            document.chronoForm.startstop.value = "stop!"
+            document.chronoForm.startstop.onclick = chronoStop
+            document.chronoForm.reset.onclick = chronoReset
+            start = new Date()-diff
+            start = new Date(start)
+            chrono()
+        }
+        function chronoReset(){
+            document.getElementById("chronotime").innerHTML = "0:00:00:000"
+            start = new Date()
+        }
+        function chronoStopReset(){
+            document.getElementById("chronotime").innerHTML = "0:00:00:000"
+            document.chronoForm.startstop.onclick = chronoStart
+        }
+        function chronoStop(){
+            document.chronoForm.startstop.value = "start!"
+            document.chronoForm.startstop.onclick = chronoContinue
+            document.chronoForm.reset.onclick = chronoStopReset
+            clearTimeout(timerID)
+        }
+        ///////////////////////////////////////////////////////////////////
+        {# http://codices.b67.me/index.php/javascript/3-chronometre-en-javascript #}
+        // ss=0;
+        // s=00;
+        // m='0'+0;
+        // h='0'+0;
+        // j=0;
+        // window.status = "Chrono "+j+" jour(s) et " +h + ' : '  + m + ' : ' + s ;
+        // function Chrono() {
+        //     if (m==0) {m='00'}
+        //     if(h==0) {h='00'}
+        //     if (ss<10){ss='0'+ss;}
+        //     if (s<10){s='0'+s;}
+        //     window.status = "Chrono "+j+" jour(s) et " +h + ' : '  + m + ' : ' + s ;
+        //     document.formu.heure.value =j+" jour(s) et "+h + ' : ' + m + ' : ' + s ;
+        //     document.formu.seco.value =ss;
+        //     s++;
+        //     ss++;
+        //     if (h==24){h='0'+0;j++;}
+        //     if (s==60){s=0;s=0; m++;if(m<10){m='0'+m;}}
+        //     if (m==60){m='0'+0;h++;if(h<10){h='0'+h;}}
+        //     chrono=window.setTimeout("Chrono();",1000);
+        // }
+
+        ///////////////////////////////////////////////////////////////////
+    </script>
+{% endblock %}
