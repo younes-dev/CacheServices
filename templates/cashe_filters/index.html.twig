@@ -46,6 +46,9 @@
             width: 450px;
             overflow-y: scroll;
         }
+        #form_start_help,#form_end_help{
+            font-size: 8px!important;
+        }
 
     </style>
     <div class="container-fluid mt-5">
@@ -76,16 +79,20 @@
             </div>
 
             <div class="col-md-4">
-                <h3> Range of Articles [0..20]</h3>
+                <h3> Range of Articles [1..100]</h3>
 
                 {########################################}
+
                 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
                 {{ form_start(form) }}
-                  {#c hange Form Name from twig by merge new Variables #}
-{#                {{ dump(form.vars) }}#}
-{#                {%  set ArticleList=form.vars|merge({"id":"ArticleList","name":"ArticleList","full_name":"ArticleList","unique_block_prefix":"_ArticleList",}) %}#}
-{#                {{ dump(ArticleList) }}#}
+
+                {#####################################################}
+                {# change Form Name from twig by merge new Variables #}
+                {#{{ dump(form.vars) }}#}
+                {#{%  set ArticleList=form.vars|merge({"id":"ArticleList","name":"ArticleList","full_name":"ArticleList","unique_block_prefix":"_ArticleList",}) %}#}
+                {#{{ dump(ArticleList) }}#}
+                {#####################################################}
 
                 <div class="my-custom-class-for-errors">
                     {{ form_errors(form) }}
