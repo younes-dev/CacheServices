@@ -264,6 +264,10 @@ class HomeController extends AbstractController
      */
     public function createArticle(Request $request)
         {
+            //TODO implement Event OnCreateArticle
+            // Exemple : https://github.com/symfony/demo/blob/master/src/EventSubscriber/CommentNotificationSubscriber.php
+            // Exemple : https://github.com/symfony/demo/blob/master/src/Event/CommentCreatedEvent.php
+            // Exemple : https://github.com/symfony/demo/blob/master/src/Controller/BlogController.php    déclencher l'évent page:114
             $article=new Article();
             $form=$this->createForm(ArticleType::class,$article);
             $form->handleRequest($request);

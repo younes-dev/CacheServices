@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
+use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,16 +26,12 @@ class ArticleRepository extends ServiceEntityRepository
 
     /**
      * @return int|mixed|string
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function nombreArticles():Integer
+    public function enabledArticles():array
     {
-        $qb = $this->createQueryBuilder('a');
-
-        $qb->select('COUNT(a.id) AS nombre')
+        $qb = $this->createQueryBuilder('a')
             ->where('a.status= true');
-        return $qb->getQuery()->getSingleScalarResult();
+        return $qb->getQuery()->getResult();
     }
 
 
@@ -50,6 +48,20 @@ class ArticleRepository extends ServiceEntityRepository
             //->orderBy('a.createdAt', 'DESC')
         ;
         return $qb->getQuery()->getResult();
+
+          //***********************************\\
+         //          this return object         \\
+        //***************************************\\
+//        $result = $qb->getQuery()->getResult();
+//        $result1 = $qb->getQuery()->getResult(Query::HYDRATE_OBJECT);
+//        $result5 = $qb->getQuery()->getResult(Query::HYDRATE_SIMPLEOBJECT);
+
+          //***********************************\\
+         //          this return array          \\
+        //***************************************\\
+//        $result = $qb->getQuery()->getArrayResult();
+//        $result2 = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
+//        $result3 = $qb->getQuery()->getResult(Query::HYDRATE_SCALAR);
     }
 
 
