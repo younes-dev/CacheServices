@@ -29,3 +29,20 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # use this tag name to autowired and Autoconfigured the CacheExample
+#    app.cache_example:
+#        public: true
+#        alias: App\Service\CacheExample
+
+    # ... default stuff here
+
+    # to use app.cache.sprocket as default cache we need to notify it like this example
+    App\Service\CacheExample:
+        arguments:
+            $cache: "@app.cache.widget"
+
+#    App\Service\CacheExample:
+#        arguments:
+#            $cache: "@app.cache.sprocket"
+

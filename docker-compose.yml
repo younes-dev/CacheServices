@@ -10,7 +10,15 @@ services:
     memcached:
       image: memcached:alpine
       container_name: CacheServices-memcached
-
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MEMCACHED_MAX_CONNECTIONS=2000
+        - MEMCACHED_CACHE_SIZE=128
+      ports:
+        - '11211:11211'
+#        - '23660:23660'
 
 ##########################################
 #                php Image               #
@@ -120,8 +128,8 @@ services:
         hostname: redis
         working_dir: /application
         volumes:
-          - .:/application
-          - "./volumes/redis:/data"
+#          - .:/application
+          - ./redis.conf:/etc/redis/redis.conf
         ports:
           - "6379:6379" 
          

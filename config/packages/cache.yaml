@@ -1,7 +1,44 @@
+# Tutoriel References:
+#https://codereviewvideos.com/course/symfony-cache/video/part-1-2-symfony-3-with-redis-cache
+#https://codereviewvideos.com/course/symfony-cache/video/part-2-2-symfony-3-with-redis-cache
+
+parameters:
+    redis.host: '%env(REDIS_HOST)%'
+    redis.port: '%env(REDIS_PORT)%'
 framework:
     cache:
         # Unique name of your app: used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
+
+        ############################################################
+        ###     cache everything under one big central cache     ###
+        ############################################################
+
+#        app: cache.adapter.redis
+#        #default_redis_provider: 'redis://localhost:6379'
+#        default_redis_provider: "redis://%redis.host%:%redis.port%"
+
+        ###################################################
+        ###         create cache instance pools         ###
+        ###################################################
+
+        app: cache.adapter.redis
+        default_redis_provider: "redis://%redis.host%:%redis.port%"
+        pools:
+            app.cache.widget: # widget is just a variable you could change it
+                public: true
+                adapter: cache.adapter.redis
+                default_lifetime: 10 # 100 seconds
+            app.cache.sprocket: # sprocket is just a variable you could change it
+                #public: true  # (By default false, if public not set)
+                adapter: cache.adapter.redis
+                default_lifetime: 10 # 604800 : 1 week in seconds
+
+        ####################################################
+#        prefix_seed: symfony_4_redis_cache
+#        app: cache.adapter.redis
+#        default_redis_provider: 'redis://redis'
+        ####################################################
 
         # The "app" cache stores to the filesystem by default.
         # The data in this cache should persist between deploys.
