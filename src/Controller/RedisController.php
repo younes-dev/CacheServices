@@ -19,12 +19,14 @@ class RedisController extends AbstractController
      */
     public function indexAction(CacheExample $cacheExample)
     {
+        $key=$cacheExample->getCacheData()["Data"];
+        $articles=$key["article"];
+        $enabledArticles=$key["enabledArticles"];
 
-         return $this->render('redis/index.html.twig', [
-            'cache' => [
-                'hit' => $cacheExample->get()->isHit(),
-            ],
-            'controller_name' => 'RedisController'
+        return $this->render('redis/index.html.twig', [
+
+             'articles' => $articles,
+             'enabledArticles' => $enabledArticles,
         ]);
     }
 

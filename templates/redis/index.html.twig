@@ -1,23 +1,114 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RedisController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"
+          xmlns="http://www.w3.org/1999/html">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅ </h1>
+    <style>
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/application/src/Controller/RedisController.php'|file_link(0) }}">src/Controller/RedisController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/application/templates/redis/index.html.twig'|file_link(0) }}">templates/redis/index.html.twig</a></code></li>
-        <li>
-            Was the cache hit? {{ cache.hit ? 'yes' : 'no' }}
-        </li>
-    </ul>
-</div>
+        th {
+            text-align: left;
+            padding: 10px;
+            background-color: greenyellow;
+            font-size: small;
+
+        }
+
+        td {
+            text-align: left;
+            padding: 10px;
+            font-size: small;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        h3{
+            text-align: center;
+            margin-top: -20px;
+        }
+
+        .btn-primary{
+            margin-top: 38px!important;
+        }
+
+        div.scroll {
+            background-color: lightblue;
+            height: 500px;
+            width: 450px;
+            overflow-y: scroll;
+        }
+        #form_start_help,#form_end_help{
+            font-size: 8px!important;
+        }
+
+    </style>
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h3> All Articles </h3>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Titre</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Image</th>
+                    </tr>
+                    {% for article in articles %}
+                        <tr>
+                            <td>{{ article.id }}</td>
+                            <td>{{ article.titre }}</td>
+                            <td>{{ article.content }}</td>
+                            <td>{{ article.createdAt|date }}</td>
+                            <td>
+                                <img src="{{ asset('/Images/'~ article.image) }}" alt="" height="60px" width="60px">
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+
+
+            <div class="col-md-6">
+                <h3> Enabled Status Articles </h3>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Titre</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Image</th>
+                    </tr>
+                    {% for article in enabledArticles %}
+                        <tr>
+                            <td>{{ article.id }}</td>
+                            <td>{{ article.titre }}</td>
+                            <td>{{ article.content }}</td>
+                            <td>{{ article.createdAt|date }}</td>
+                            <td>
+                                <img src="{{ asset('/Images/'~ article.image) }}" alt="" height="60px" width="60px">
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+    {########################################################################}
+
+
 {% endblock %}
